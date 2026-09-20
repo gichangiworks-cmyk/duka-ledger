@@ -433,7 +433,7 @@ button:hover{filter:brightness(.96)}button:disabled{opacity:.5;cursor:not-allowe
   </div>
 
 
-  <section class="subscription-bar" aria-label="Monthly subscription"><div><strong>KSh 200 / month</strong><small id="subscriptionStatus">Checking access…</small></div><button class="primary" id="openPayment">Pay KSh 200</button></section><section id="accessGate" class="access-gate" hidden><h2>Renew to open your shop.</h2><p>Your access has expired. Pay KSh 200 for this month to continue. Your saved records are kept on this device.</p><button class="primary" id="gatePayment">Pay KSh 200 with M-Pesa</button><button class="plain" id="gateCode">I have an admin approval code</button></section><div class="intro"><div><h1 id="dashboardTitle">Your shop, at a glance.</h1><p>Know who owes you. Keep every payment in one place.</p></div><button class="primary" id="addCustomerBtn">+ Add customer</button></div>
+  <section class="subscription-bar" aria-label="Monthly subscription"><div><strong>KSh 250 / month</strong><small id="subscriptionStatus">Checking access…</small></div><button class="primary" id="openPayment">Pay KSh 250</button></section><section id="accessGate" class="access-gate" hidden><h2>Renew to open your shop.</h2><p>Your access has expired. Pay KSh 250 for this month to continue. Your saved records are kept on this device.</p><button class="primary" id="gatePayment">Pay KSh 250 with M-Pesa</button><button class="plain" id="gateCode">I have an admin approval code</button></section><div class="intro"><div><h1 id="dashboardTitle">Your shop, at a glance.</h1><p>Know who owes you. Keep every payment in one place.</p></div><button class="primary" id="addCustomerBtn">+ Add customer</button></div>
   <section class="overview" aria-label="Your shop totals">
     <div class="metric"><p>Money customers owe you</p><strong id="overviewOwed">KES 0</strong><small id="overviewOwedCount">No unpaid balances</small></div>
     <div class="metric"><p>Payments this month</p><strong id="overviewPaid">KES 0</strong><small id="overviewMonth"></small></div>
@@ -580,7 +580,7 @@ button:hover{filter:brightness(.96)}button:disabled{opacity:.5;cursor:not-allowe
   </div>
 </div>
 
-<div class="overlay" id="paymentOverlay"><div class="sheet"><div class="sheet-title">Renew your shop</div><div class="payment-price">KSh 200 <small>/ month</small></div><p class="payment-note">Pay for the current calendar month. Check the M-Pesa prompt on your phone before entering your PIN.</p><div class="field"><label for="paymentPhone">Your M-Pesa phone number</label><input id="paymentPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="07XX XXX XXX"></div><button class="btn btn-primary" id="sendPayment">Send KSh 200 payment prompt</button><div class="payment-status" id="paymentStatus" role="status" aria-live="polite"></div><p class="payment-note">Never enter your M-Pesa PIN on this website.</p><button class="btn btn-outline" id="closePayment">Close</button></div></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="overlay" id="paymentOverlay"><div class="sheet"><div class="sheet-title">Renew your shop</div><div class="payment-price">KSh 250 <small>/ month</small></div><p class="payment-note">Pay for the current calendar month. Check the M-Pesa prompt on your phone before entering your PIN.</p><div class="field"><label for="paymentPhone">Your M-Pesa phone number</label><input id="paymentPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="07XX XXX XXX"></div><button class="btn btn-primary" id="sendPayment">Send KSh 250 payment prompt</button><div class="payment-status" id="paymentStatus" role="status" aria-live="polite"></div><p class="payment-note">Never enter your M-Pesa PIN on this website.</p><button class="btn btn-outline" id="closePayment">Close</button></div></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function(){
@@ -594,7 +594,7 @@ button:hover{filter:brightness(.96)}button:disabled{opacity:.5;cursor:not-allowe
   var verifiedPeriods = {};
   var OPERATOR_WHATSAPP = '254700000000';  // YOUR WhatsApp number, digits only, country code, no +
   var TRIAL_DAYS = 21;
-  var MONTHLY_FEE = 200;
+  var MONTHLY_FEE = 250;
   var BACKEND_URL = '';  // paste your Google Apps Script Web App URL here once deployed — leave blank to skip
   // ==============================================================================
 
@@ -614,7 +614,7 @@ button:hover{filter:brightness(.96)}button:disabled{opacity:.5;cursor:not-allowe
     try {
       var parts=token.trim().split('.'); if(parts.length!==2)return false;
       var payload=JSON.parse(new TextDecoder().decode(unbase64url(parts[0])));
-      if(payload.shop!==state.deviceId || payload.month!==currentPeriod() || payload.amount!==200)return false;
+      if(payload.shop!==state.deviceId || payload.month!==currentPeriod() || payload.amount!==250)return false;
       var key=await crypto.subtle.importKey('jwk',PUBLIC_KEY,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);
       return await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},key,unbase64url(parts[1]),new TextEncoder().encode(parts[0]));
     }catch(e){return false;}
@@ -704,7 +704,7 @@ button:hover{filter:brightness(.96)}button:disabled{opacity:.5;cursor:not-allowe
   function updateStatusBanners(){
     var unlocked=isUnlocked(); document.getElementById('app').classList.toggle('app-locked',!unlocked); document.getElementById('accessGate').hidden=unlocked;
     document.getElementById('subscriptionStatus').textContent=isTrialActive()?'Free trial · '+(TRIAL_DAYS-daysSinceInstall())+' days left':(unlocked?'Approved for '+currentPeriod():'Payment needed to use your shop');
-    document.getElementById('openPayment').textContent=(!isTrialActive()&&unlocked)?'This month is paid':'Pay KSh 200'; document.getElementById('openPayment').disabled=!isTrialActive()&&unlocked;
+    document.getElementById('openPayment').textContent=(!isTrialActive()&&unlocked)?'This month is paid':'Pay KSh 250'; document.getElementById('openPayment').disabled=!isTrialActive()&&unlocked;
 
     var trialB = document.getElementById('trialBanner');
     var lockB = document.getElementById('lockBanner');
